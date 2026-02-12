@@ -27,9 +27,21 @@ app.include_router(staff_events.router, prefix="/api/events", tags=["Кадро�
 app.include_router(reports.router, prefix="/api/reports", tags=["Отчёты"])
 app.include_router(admin.router, prefix="/api/admin", tags=["Админка"])
 
-# Serve frontend static files
-frontend_dist = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
-if os.path.exists(frontend_dist):
+# Serve frontend static files — support both dev and PyInstaller paths
+def _find_frontend_dist():
+    # PyInstaller bundled path
+    if getattr(sys, '_MEIPASS', None):
+        p = os.path.join(sys._MEIPASS, 'frontend', 'dist')
+        if os.path.exists(p):
+            return p
+    # Normal dev path
+    p = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
+    if os.path.exists(p):
+        return p
+    return None
+
+frontend_dist = _find_frontend_dist()
+if frontend_dist:
     app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
 
     @app.get("/{full_path:path}")

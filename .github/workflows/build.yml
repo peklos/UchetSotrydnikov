@@ -1,0 +1,100 @@
+name: Build & Release
+
+on:
+  push:
+    branches: ['*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: UchetSotrudnikov-Windows
+            pyinstaller_ext: .exe
+          - os: macos-latest
+            artifact: UchetSotrudnikov-macOS
+            pyinstaller_ext: ""
+          - os: ubuntu-latest
+            artifact: UchetSotrudnikov-Linux
+            pyinstaller_ext: ""
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ---------- Frontend ----------
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci --ignore-scripts || npm install
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      # ---------- Backend ----------
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build backend with PyInstaller
+        working-directory: backend
+        run: pyinstaller server.spec --clean --noconfirm
+
+      - name: Move backend binary to backend_dist
+        shell: bash
+        run: |
+          mkdir -p backend_dist
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            cp backend/dist/server.exe backend_dist/server.exe
+          else
+            cp backend/dist/server backend_dist/server
+          fi
+
+      # ---------- Electron ----------
+      - name: Install Electron dependencies
+        run: npm install
+
+      - name: Build Electron app (Windows)
+        if: runner.os == 'Windows'
+        run: npx electron-builder --win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron app (macOS)
+        if: runner.os == 'macOS'
+        run: npx electron-builder --mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron app (Linux)
+        if: runner.os == 'Linux'
+        run: npx electron-builder --linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------- Upload ----------
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.AppImage
+          if-no-files-found: warn
