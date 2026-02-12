@@ -73,17 +73,18 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e8f5e9 0%, #f0f2f5 50%, #e8f5e9 100%);
+  background: linear-gradient(135deg, #0d1117 0%, #0f1117 50%, #0d1117 100%);
   padding: 20px;
 }
 
 .auth-card {
-  background: white;
+  background: #161b22;
   border-radius: 16px;
   padding: 40px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid #21262d;
 }
 
 .auth-header {
@@ -93,8 +94,8 @@ export default {
 
 .auth-logo {
   font-size: 40px;
-  color: #2e7d32;
-  background: #e8f5e9;
+  color: #3fb950;
+  background: #12261e;
   width: 64px;
   height: 64px;
   display: flex;
@@ -107,13 +108,13 @@ export default {
 .auth-header h1 {
   font-size: 22px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #e6edf3;
   margin-bottom: 4px;
 }
 
 .auth-header p {
   font-size: 13px;
-  color: #7c8db0;
+  color: #7d8590;
 }
 
 .auth-btn {
@@ -124,7 +125,7 @@ export default {
 }
 
 .auth-error {
-  color: #e53e3e;
+  color: #f85149;
   font-size: 13px;
   margin-bottom: 8px;
   text-align: center;
@@ -134,11 +135,11 @@ export default {
   text-align: center;
   margin-top: 20px;
   font-size: 13px;
-  color: #7c8db0;
+  color: #7d8590;
 }
 
 .auth-footer a {
-  color: #2e7d32;
+  color: #58a6ff;
   text-decoration: none;
   font-weight: 600;
   margin-left: 4px;
@@ -147,10 +148,10 @@ export default {
 .auth-hint {
   margin-top: 20px;
   padding: 12px;
-  background: #f7f8fa;
+  background: #1c2128;
   border-radius: 8px;
   font-size: 12px;
-  color: #7c8db0;
+  color: #7d8590;
   text-align: center;
 }
 

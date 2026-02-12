@@ -189,19 +189,24 @@ export default {
   transition: background 0.15s;
 }
 
+.guide-header {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .guide-header:hover {
-  background: #f7faf7;
+  background: #1c2128;
 }
 
 .guide-header h3 {
   font-size: 15px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #e6edf3;
 }
 
 .guide-toggle {
   font-size: 20px;
-  color: #2e7d32;
+  color: #58a6ff;
   font-weight: 600;
   width: 28px;
   height: 28px;
@@ -209,14 +214,14 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  background: #e8f5e9;
+  background: #1c2a3a;
 }
 
 .guide-body {
   padding: 0 20px 20px;
   font-size: 14px;
   line-height: 1.7;
-  color: #4a5568;
+  color: #8b949e;
 }
 
 .guide-body p {
@@ -233,6 +238,6 @@ export default {
 }
 
 .guide-body strong {
-  color: #2c3e50;
+  color: #e6edf3;
 }
 </style>

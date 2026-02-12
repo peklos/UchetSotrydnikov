@@ -25,7 +25,7 @@ def get_employees(
     params = []
 
     if search:
-        query += " AND (e.last_name LIKE ? OR e.first_name LIKE ? OR e.middle_name LIKE ? OR e.phone LIKE ? OR e.email LIKE ?)"
+        query += " AND (LOWER(e.last_name) LIKE LOWER(?) OR LOWER(e.first_name) LIKE LOWER(?) OR LOWER(e.middle_name) LIKE LOWER(?) OR e.phone LIKE ? OR LOWER(e.email) LIKE LOWER(?))"
         s = f"%{search}%"
         params.extend([s, s, s, s, s])
 

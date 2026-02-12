@@ -42,19 +42,19 @@
     <div v-if="activeTab === 'contacts'">
       <div class="card">
         <div class="toolbar">
-          <h3 style="font-size: 16px; font-weight: 600;">Контактные данные</h3>
-          <button class="btn btn-primary btn-sm" @click="showContactModal = true">+ Добавить</button>
+          <h3 style="font-size: 16px; font-weight: 600; color: #e6edf3;">Контактные данные</h3>
+          <button v-if="canEdit" class="btn btn-primary btn-sm" @click="showContactModal = true">+ Добавить</button>
         </div>
         <table class="data-table" v-if="employee.contacts && employee.contacts.length">
           <thead>
-            <tr><th>Тип</th><th>Значение</th><th>Основной</th><th></th></tr>
+            <tr><th>Тип</th><th>Значение</th><th>Основной</th><th v-if="canEdit"></th></tr>
           </thead>
           <tbody>
             <tr v-for="c in employee.contacts" :key="c.id">
               <td>{{ c.contact_type }}</td>
               <td>{{ c.contact_value }}</td>
               <td>{{ c.is_primary ? 'Да' : 'Нет' }}</td>
-              <td><button class="btn btn-danger btn-sm" @click="deleteContact(c.id)">Уд.</button></td>
+              <td v-if="canEdit"><button class="btn btn-danger btn-sm" @click="deleteContact(c.id)">Уд.</button></td>
             </tr>
           </tbody>
         </table>
@@ -89,12 +89,12 @@
     <div v-if="activeTab === 'education'">
       <div class="card">
         <div class="toolbar">
-          <h3 style="font-size: 16px; font-weight: 600;">Образование</h3>
-          <button class="btn btn-primary btn-sm" @click="showEduModal = true">+ Добавить</button>
+          <h3 style="font-size: 16px; font-weight: 600; color: #e6edf3;">Образование</h3>
+          <button v-if="canEdit" class="btn btn-primary btn-sm" @click="showEduModal = true">+ Добавить</button>
         </div>
         <table class="data-table" v-if="employee.education && employee.education.length">
           <thead>
-            <tr><th>Учебное заведение</th><th>Специальность</th><th>Степень</th><th>Годы</th><th></th></tr>
+            <tr><th>Учебное заведение</th><th>Специальность</th><th>Степень</th><th>Годы</th><th v-if="canEdit"></th></tr>
           </thead>
           <tbody>
             <tr v-for="e in employee.education" :key="e.id">
@@ -102,7 +102,7 @@
               <td>{{ e.speciality || '—' }}</td>
               <td>{{ e.degree || '—' }}</td>
               <td>{{ e.year_start }}–{{ e.year_end || '...' }}</td>
-              <td><button class="btn btn-danger btn-sm" @click="deleteEdu(e.id)">Уд.</button></td>
+              <td v-if="canEdit"><button class="btn btn-danger btn-sm" @click="deleteEdu(e.id)">Уд.</button></td>
             </tr>
           </tbody>
         </table>
@@ -160,7 +160,7 @@
 
     <!-- Events tab -->
     <div v-if="activeTab === 'events'" class="card">
-      <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">История кадровых событий</h3>
+      <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">История кадровых событий</h3>
       <table class="data-table" v-if="employee.events && employee.events.length">
         <thead>
           <tr><th>Дата</th><th>Тип</th><th>Описание</th><th>Документ</th></tr>
@@ -191,6 +191,14 @@ export default {
       showEduModal: false,
       contactForm: { contact_type: 'телефон', contact_value: '', is_primary: 0 },
       eduForm: { institution: '', speciality: '', degree: '', year_start: null, year_end: null, diploma_number: '' }
+    }
+  },
+  computed: {
+    canEdit() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        return user.role_id === 1 || user.role_id === 2
+      } catch { return false }
     }
   },
   async mounted() {
@@ -238,19 +246,19 @@ export default {
 <style scoped>
 .info-row {
   padding: 10px 0;
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #21262d;
 }
 
 .info-label {
   display: block;
   font-size: 12px;
-  color: #7c8db0;
+  color: #7d8590;
   margin-bottom: 2px;
 }
 
 .info-value {
   font-size: 14px;
   font-weight: 500;
-  color: #2c3e50;
+  color: #e6edf3;
 }
 </style>

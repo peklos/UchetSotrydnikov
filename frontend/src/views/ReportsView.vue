@@ -19,7 +19,7 @@
           <div class="stat-label">Всего сотрудников</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" style="color: #c62828;">{{ stats.fired_employees }}</div>
+          <div class="stat-value" style="color: #f85149;">{{ stats.fired_employees }}</div>
           <div class="stat-label">Уволено</div>
         </div>
         <div class="stat-card">
@@ -30,7 +30,7 @@
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
         <div class="card">
-          <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">По подразделениям</h3>
+          <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">По подразделениям</h3>
           <table class="data-table">
             <thead><tr><th>Подразделение</th><th>Сотрудников</th><th>Ср. оклад</th></tr></thead>
             <tbody>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">По статусу</h3>
+          <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">По статусу</h3>
           <div v-for="s in byStatus" :key="s.status" class="report-bar">
             <div class="report-bar-header">
               <span :class="'badge badge-' + statusColor(s.status)">{{ s.status }}</span>
@@ -55,7 +55,7 @@
             </div>
           </div>
 
-          <h3 style="margin: 24px 0 16px; font-size: 16px; font-weight: 600;">По типу занятости</h3>
+          <h3 style="margin: 24px 0 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">По типу занятости</h3>
           <div v-for="t in byType" :key="t.employment_type" class="report-bar">
             <div class="report-bar-header">
               <span>{{ t.employment_type }}</span>
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <h3 style="margin: 24px 0 16px; font-size: 16px; font-weight: 600;">По полу</h3>
+          <h3 style="margin: 24px 0 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">По полу</h3>
           <div v-for="g in byGender" :key="g.gender" class="report-bar">
             <div class="report-bar-header">
               <span>{{ g.gender === 'М' ? 'Мужской' : 'Женский' }}</span>
@@ -182,7 +182,7 @@ export default {
     formatDate(d) { return d ? new Date(d).toLocaleDateString('ru-RU') : '' },
     percent(v, total) { return Math.round((v / total) * 100) },
     statusColor(s) { return { 'работает': 'green', 'уволен': 'red', 'в отпуске': 'blue', 'больничный': 'orange', 'командировка': 'purple' }[s] || 'gray' },
-    statusBg(s) { return { 'работает': '#2e7d32', 'уволен': '#c62828', 'в отпуске': '#1565c0', 'больничный': '#e65100', 'командировка': '#6a1b9a' }[s] || '#999' }
+    statusBg(s) { return { 'работает': '#238636', 'уволен': '#da3633', 'в отпуске': '#1565c0', 'больничный': '#e65100', 'командировка': '#6a1b9a' }[s] || '#999' }
   }
 }
 </script>
@@ -202,14 +202,14 @@ export default {
 
 .progress-bar {
   height: 6px;
-  background: #f0f2f5;
+  background: #21262d;
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #2e7d32;
+  background: #238636;
   border-radius: 3px;
   transition: width 0.5s ease;
 }
