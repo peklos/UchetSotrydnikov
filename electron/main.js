@@ -1,17 +1,17 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 
 let mainWindow;
 let backendProcess;
 
 function getBackendPath() {
-  const isPackaged = app.isPackaged;
-  if (isPackaged) {
-    const platform = process.platform;
-    const ext = platform === 'win32' ? '.exe' : '';
-    return path.join(process.resourcesPath, 'backend', `server${ext}`);
+  if (app.isPackaged) {
+    const ext = process.platform === 'win32' ? '.exe' : '';
+    const p = path.join(process.resourcesPath, 'backend', `server${ext}`);
+    return p;
   }
   return null;
 }
@@ -23,9 +23,16 @@ function startBackend() {
     return;
   }
 
+  if (!fs.existsSync(backendPath)) {
+    console.error('Backend binary not found at:', backendPath);
+    dialog.showErrorBox('Ошибка запуска', `Не найден файл сервера:\n${backendPath}`);
+    return;
+  }
+
   console.log('Starting backend:', backendPath);
   backendProcess = spawn(backendPath, [], {
     stdio: 'pipe',
+    cwd: path.dirname(backendPath),
     env: { ...process.env }
   });
 
@@ -37,8 +44,16 @@ function startBackend() {
     console.error(`[backend] ${data}`);
   });
 
+  backendProcess.on('error', (err) => {
+    console.error('Failed to start backend process:', err);
+    dialog.showErrorBox('Ошибка', `Не удалось запустить сервер:\n${err.message}`);
+  });
+
   backendProcess.on('close', (code) => {
     console.log(`Backend process exited with code ${code}`);
+    if (code !== 0 && code !== null) {
+      dialog.showErrorBox('Ошибка сервера', `Сервер завершился с кодом ${code}`);
+    }
   });
 }
 
@@ -82,6 +97,11 @@ function createWindow() {
 
   mainWindow.loadURL('http://127.0.0.1:8000');
 
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDesc) => {
+    console.error('Page failed to load:', errorCode, errorDesc);
+    mainWindow.loadURL('http://127.0.0.1:8000');
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
@@ -91,9 +111,13 @@ app.on('ready', async () => {
   startBackend();
 
   try {
-    await waitForBackend('http://127.0.0.1:8000/api/auth/me?token=ping');
+    await waitForBackend('http://127.0.0.1:8000/api/departments');
   } catch (e) {
     console.error('Failed to start backend:', e.message);
+    dialog.showErrorBox(
+      'Ошибка запуска',
+      'Сервер не запустился за 30 секунд.\nПриложение может работать некорректно.'
+    );
   }
 
   createWindow();
