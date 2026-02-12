@@ -20,7 +20,7 @@
           <option value="премия">Премия</option>
         </select>
       </div>
-      <button class="btn btn-primary" @click="showModal = true">+ Создать событие</button>
+      <button v-if="canEdit" class="btn btn-primary" @click="showModal = true">+ Создать событие</button>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden;">
@@ -33,7 +33,7 @@
             <th>Описание</th>
             <th>Документ</th>
             <th>Дата оконч.</th>
-            <th></th>
+            <th v-if="canEdit"></th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
             <td style="max-width: 250px;">{{ ev.description || '—' }}</td>
             <td>{{ ev.document_number || '—' }}</td>
             <td>{{ ev.end_date ? formatDate(ev.end_date) : '—' }}</td>
-            <td><button class="btn btn-danger btn-sm" @click="deleteEvent(ev.id)">Уд.</button></td>
+            <td v-if="canEdit"><button class="btn btn-danger btn-sm" @click="deleteEvent(ev.id)">Уд.</button></td>
           </tr>
         </tbody>
       </table>
@@ -113,6 +113,14 @@ export default {
       filterType: '',
       showModal: false,
       form: { employee_id: null, event_type: 'приём', event_date: new Date().toISOString().slice(0,10), end_date: '', description: '', document_number: '' }
+    }
+  },
+  computed: {
+    canEdit() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        return user.role_id === 1 || user.role_id === 2
+      } catch { return false }
     }
   },
   async mounted() {

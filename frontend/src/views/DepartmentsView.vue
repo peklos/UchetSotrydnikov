@@ -7,14 +7,14 @@
 
     <div class="toolbar">
       <div></div>
-      <button class="btn btn-primary" @click="openAdd">+ Добавить подразделение</button>
+      <button v-if="canEdit" class="btn btn-primary" @click="openAdd">+ Добавить подразделение</button>
     </div>
 
     <div class="dept-grid">
       <div v-for="dept in departments" :key="dept.id" class="card dept-card" @click="selectDept(dept)">
         <div class="dept-card-header">
           <h3>{{ dept.name }}</h3>
-          <div class="dept-actions" @click.stop>
+          <div v-if="canEdit" class="dept-actions" @click.stop>
             <button class="btn btn-secondary btn-sm" @click="openEdit(dept)">Изм.</button>
             <button class="btn btn-danger btn-sm" @click="deleteDept(dept.id)">Уд.</button>
           </div>
@@ -32,7 +32,7 @@
 
     <!-- Department detail -->
     <div v-if="selected" class="card" style="margin-top: 16px;">
-      <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">Сотрудники: {{ selected.name }}</h3>
+      <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600; color: #e6edf3;">Сотрудники: {{ selected.name }}</h3>
       <table class="data-table" v-if="selectedEmployees.length">
         <thead>
           <tr><th>ФИО</th><th>Должность</th><th>Статус</th></tr>
@@ -89,6 +89,14 @@ export default {
       showModal: false,
       editing: null,
       form: { name: '', description: '', head_name: '', phone: '' }
+    }
+  },
+  computed: {
+    canEdit() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        return user.role_id === 1 || user.role_id === 2
+      } catch { return false }
     }
   },
   async mounted() { await this.load() },
@@ -151,8 +159,8 @@ export default {
 }
 
 .dept-card:hover {
-  border-color: #2e7d32;
-  box-shadow: 0 4px 12px rgba(46,125,50,0.08);
+  border-color: #58a6ff;
+  box-shadow: 0 4px 12px rgba(88,166,255,0.08);
 }
 
 .dept-card-header {
@@ -165,6 +173,7 @@ export default {
 .dept-card-header h3 {
   font-size: 15px;
   font-weight: 600;
+  color: #e6edf3;
 }
 
 .dept-actions {
@@ -174,13 +183,13 @@ export default {
 
 .dept-desc {
   font-size: 13px;
-  color: #7c8db0;
+  color: #7d8590;
   margin-bottom: 8px;
 }
 
 .dept-meta {
   font-size: 12px;
-  color: #7c8db0;
+  color: #7d8590;
   margin-bottom: 8px;
 }
 

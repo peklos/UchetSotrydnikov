@@ -10,7 +10,7 @@
         <option value="">Все подразделения</option>
         <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
       </select>
-      <button class="btn btn-primary" @click="openAdd">+ Добавить должность</button>
+      <button v-if="canEdit" class="btn btn-primary" @click="openAdd">+ Добавить должность</button>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden;">
@@ -22,7 +22,7 @@
             <th>Мин. оклад</th>
             <th>Макс. оклад</th>
             <th>Описание</th>
-            <th>Действия</th>
+            <th v-if="canEdit">Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -32,7 +32,7 @@
             <td>{{ pos.salary_min ? pos.salary_min.toLocaleString('ru-RU') : '—' }}</td>
             <td>{{ pos.salary_max ? pos.salary_max.toLocaleString('ru-RU') : '—' }}</td>
             <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">{{ pos.description || '—' }}</td>
-            <td>
+            <td v-if="canEdit">
               <button class="btn btn-secondary btn-sm" @click="openEdit(pos)">Изм.</button>
               <button class="btn btn-danger btn-sm" style="margin-left:4px" @click="deletePos(pos.id)">Уд.</button>
             </td>
@@ -91,6 +91,14 @@ export default {
       showModal: false,
       editing: null,
       form: { name: '', department_id: null, salary_min: null, salary_max: null, description: '' }
+    }
+  },
+  computed: {
+    canEdit() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        return user.role_id === 1 || user.role_id === 2
+      } catch { return false }
     }
   },
   async mounted() {

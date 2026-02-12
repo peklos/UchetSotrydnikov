@@ -21,7 +21,7 @@
           <option value="командировка">Командировка</option>
         </select>
       </div>
-      <button class="btn btn-primary" @click="openAdd">+ Добавить сотрудника</button>
+      <button v-if="canEdit" class="btn btn-primary" @click="openAdd">+ Добавить сотрудника</button>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden;">
@@ -34,7 +34,7 @@
             <th>Телефон</th>
             <th>Статус</th>
             <th>Дата приёма</th>
-            <th>Действия</th>
+            <th v-if="canEdit">Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
             <td>{{ emp.phone || '—' }}</td>
             <td><span :class="'badge badge-' + statusColor(emp.status)">{{ emp.status }}</span></td>
             <td>{{ formatDate(emp.hire_date) }}</td>
-            <td @click.stop>
+            <td v-if="canEdit" @click.stop>
               <button class="btn btn-secondary btn-sm" @click="openEdit(emp)">Изм.</button>
               <button class="btn btn-danger btn-sm" style="margin-left:4px" @click="deleteEmployee(emp.id)">Уд.</button>
             </td>
@@ -213,6 +213,14 @@ export default {
       showModal: false,
       editing: null,
       form: emptyForm()
+    }
+  },
+  computed: {
+    canEdit() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        return user.role_id === 1 || user.role_id === 2
+      } catch { return false }
     }
   },
   async mounted() {

@@ -11,7 +11,7 @@
         <div class="stat-label">Пользователей</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value" style="color: #2e7d32">{{ adminStats.active_users }}</div>
+        <div class="stat-value" style="color: #3fb950">{{ adminStats.active_users }}</div>
         <div class="stat-label">Активных</div>
       </div>
       <div class="stat-card">
@@ -25,8 +25,8 @@
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden;">
-      <div style="padding: 16px 20px; border-bottom: 1px solid #e0e4e8;">
-        <h3 style="font-size: 16px; font-weight: 600;">Пользователи системы</h3>
+      <div style="padding: 16px 20px; border-bottom: 1px solid #21262d;">
+        <h3 style="font-size: 16px; font-weight: 600; color: #e6edf3;">Пользователи системы</h3>
       </div>
       <table class="data-table">
         <thead>

@@ -7,7 +7,7 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon" style="color: #2e7d32">&#9823;</div>
+        <div class="stat-icon" style="color: #3fb950">&#9823;</div>
         <div class="stat-value">{{ stats.total_employees }}</div>
         <div class="stat-label">Сотрудников</div>
       </div>
@@ -22,7 +22,7 @@
         <div class="stat-label">Должностей</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon" style="color: #2e7d32">&#8381;</div>
+        <div class="stat-icon" style="color: #3fb950">&#8381;</div>
         <div class="stat-value">{{ formatSalary(stats.average_salary) }}</div>
         <div class="stat-label">Средняя зарплата</div>
       </div>
@@ -30,7 +30,7 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-value" style="color: #2e7d32">{{ stats.total_employees - stats.on_vacation - stats.on_sick_leave - stats.on_business_trip }}</div>
+        <div class="stat-value" style="color: #3fb950">{{ stats.total_employees - stats.on_vacation - stats.on_sick_leave - stats.on_business_trip }}</div>
         <div class="stat-label">На рабочем месте</div>
       </div>
       <div class="stat-card">
@@ -49,7 +49,7 @@
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
       <div class="card">
-        <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">По подразделениям</h3>
+        <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">По подразделениям</h3>
         <div v-for="dept in byDepartment" :key="dept.name" class="dept-bar">
           <div class="dept-bar-header">
             <span>{{ dept.name }}</span>
@@ -65,7 +65,7 @@
       </div>
 
       <div class="card">
-        <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">Последние события</h3>
+        <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #e6edf3;">Последние события</h3>
         <div v-for="event in recentEvents" :key="event.id" class="event-item">
           <span :class="'badge badge-' + eventColor(event.event_type)">{{ event.event_type }}</span>
           <span class="event-name">{{ event.employee_name }}</span>
@@ -144,14 +144,14 @@ export default {
 
 .progress-bar {
   height: 6px;
-  background: #f0f2f5;
+  background: #21262d;
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #2e7d32;
+  background: #238636;
   border-radius: 3px;
   transition: width 0.5s ease;
 }
@@ -161,7 +161,7 @@ export default {
   align-items: center;
   gap: 10px;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #21262d;
   font-size: 13px;
 }
 
@@ -171,7 +171,7 @@ export default {
 }
 
 .event-date {
-  color: #7c8db0;
+  color: #7d8590;
   font-size: 12px;
 }
 </style>
