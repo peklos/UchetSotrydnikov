@@ -1,7 +1,18 @@
 import sqlite3
 import os
+import sys
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "philharmonic.db")
+
+def _get_db_path():
+    """Return writable path for the database file.
+    In PyInstaller bundle _MEIPASS is a temp read-only dir,
+    so we store the DB next to the executable instead."""
+    if getattr(sys, 'frozen', False):
+        return os.path.join(os.path.dirname(sys.executable), "philharmonic.db")
+    return os.path.join(os.path.dirname(__file__), "philharmonic.db")
+
+
+DB_PATH = _get_db_path()
 
 
 def get_db():
